@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
 
 import "./AdminDashboard.css";
 
-const API_URL = "http://localhost:8080/api/products";
+const API_URL = "https://maison-fashion-store-analytics.onrender.com/api/products";
 
-const USERS_COUNT_API_URL = "http://localhost:8080/api/admin/users/count";
+const USERS_COUNT_API_URL = "https://maison-fashion-store-analytics.onrender.com/api/admin/users/count";
 
-const USERS_API_URL = "http://localhost:8080/api/admin/users/all";
+const USERS_API_URL = "https://maison-fashion-store-analytics.onrender.com/api/admin/users/all";
 
-const ORDERS_API_URL = "http://localhost:8080/api/admin/orders";
+const ORDERS_API_URL = "https://maison-fashion-store-analytics.onrender.com/api/admin/orders";
 const ANALYTICS_OVERVIEW_API_URL =
-  "http://localhost:8080/api/analytics/overview";
+  "https://maison-fashion-store-analytics.onrender.com/api/analytics/overview";
 const DELIVERY_STATUSES = [
 
   "PLACED",
@@ -962,7 +962,7 @@ const loadRevenue = useCallback(async () => {
 
             "Total users",
 
-            usersLoading ? "..." : totalUsers === null ? "—" : totalUsers,
+            usersLoading ? "..." : totalUsers === null ? "â€”" : totalUsers,
 
             "Registered customer accounts",
 
@@ -1010,9 +1010,9 @@ const loadRevenue = useCallback(async () => {
   revenueLoading
     ? "..."
     : totalRevenue === null
-      ? "—"
+      ? "â€”"
       : money(totalRevenue),
-  "Successful payments · excluding cancelled orders",
+  "Successful payments Â· excluding cancelled orders",
   () => goToSection("admin-orders-section")
 )}
           {clickableCard(
@@ -1037,7 +1037,7 @@ const loadRevenue = useCallback(async () => {
 
             "Total orders",
 
-            ordersLoading ? "..." : ordersError && orders.length === 0 ? "—" : orders.length,
+            ordersLoading ? "..." : ordersError && orders.length === 0 ? "â€”" : orders.length,
 
             "Customer orders",
 
@@ -1055,7 +1055,7 @@ const loadRevenue = useCallback(async () => {
 
             "Delivered orders",
 
-            ordersLoading ? "..." : ordersError && orders.length === 0 ? "—" : deliveredCount,
+            ordersLoading ? "..." : ordersError && orders.length === 0 ? "â€”" : deliveredCount,
 
             "Successfully delivered",
 
@@ -1147,7 +1147,7 @@ const loadRevenue = useCallback(async () => {
 
             <div className="admin-field">
 
-              <label htmlFor="admin-price">Price (₹) *</label>
+              <label htmlFor="admin-price">Price (â‚¹) *</label>
 
               <input id="admin-price" name="price" type="number" min="0.01" step="0.01" value={form.price} onChange={updateField} required />
 
@@ -1255,9 +1255,9 @@ const loadRevenue = useCallback(async () => {
 
                       <td>{user.id}</td>
 
-                      <td>{user.fullName || user.full_name || "—"}</td>
+                      <td>{user.fullName || user.full_name || "â€”"}</td>
 
-                      <td>{user.email || "—"}</td>
+                      <td>{user.email || "â€”"}</td>
 
                       <td><span className="admin-status is-active">{user.role || "CUSTOMER"}</span></td>
 
@@ -1381,15 +1381,15 @@ const loadRevenue = useCallback(async () => {
 
                           <div className="admin-order-payment">
 
-                            <strong>{order.paymentMethod || "—"}</strong>
+                            <strong>{order.paymentMethod || "â€”"}</strong>
 
-                            <small>{order.paymentStatus || "—"}</small>
+                            <small>{order.paymentStatus || "â€”"}</small>
 
                           </div>
 
                         </td>
 
-                        <td>{order.createdAt ? new Date(order.createdAt).toLocaleString("en-IN") : "—"}</td>
+                        <td>{order.createdAt ? new Date(order.createdAt).toLocaleString("en-IN") : "â€”"}</td>
 
                         <td>
 
@@ -1580,3 +1580,4 @@ const loadRevenue = useCallback(async () => {
   );
 
 }
+
