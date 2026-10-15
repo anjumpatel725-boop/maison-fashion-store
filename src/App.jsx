@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import AdminDashboard from "./AdminDashboard";
 const API_URL = "https://maison-fashion-store-analytics.onrender.com/api/products";
@@ -48,7 +48,7 @@ function readSavedUser() {
 }
 
 function formatDate(value) {
-  if (!value) return "â€”";
+  if (!value) return "—";
 
   const date = new Date(value);
 
@@ -697,8 +697,8 @@ if (user?.role === "ADMIN") {
   return (
     <div className="store">
       <div className="announcement">
-        Complimentary shipping on orders over â‚¹2,999
-        <span> Â· </span>
+        Complimentary shipping on orders over ₹2,999
+        <span> · </span>
         Thoughtfully chosen. Beautifully worn.
       </div>
 
@@ -806,7 +806,7 @@ if (user?.role === "ADMIN") {
             </p>
 
             <a className="primary-button" href="#products">
-              Discover the collection <span>â†—</span>
+              Discover the collection <span>↗</span>
             </a>
 
             <p className="hero-note">
@@ -850,7 +850,7 @@ if (user?.role === "ADMIN") {
                 }}
               >
                 {item}
-                <span>â†—</span>
+                <span>↗</span>
               </button>
             ))}
           </div>
@@ -946,7 +946,7 @@ if (user?.role === "ADMIN") {
           <h2>Good things, delivered.</h2>
           <p>New arrivals, thoughtful edits and a little inspiration.</p>
           <a href="#home" className="newsletter-link">
-            Explore the collection â†—
+            Explore the collection ↗
           </a>
         </section>
       </main>
@@ -958,7 +958,7 @@ if (user?.role === "ADMIN") {
         </a>
 
         <p>Thoughtfully chosen. Made for your everyday.</p>
-        <span>Â© 2026 MAISON. Demo storefront.</span>
+        <span>© 2026 MAISON. Demo storefront.</span>
       </footer>
 
       {notice && (
@@ -1002,7 +1002,7 @@ if (user?.role === "ADMIN") {
                 disabled={authLoading}
                 onClick={() => setAuthOpen(false)}
               >
-                âœ•
+                ✕
               </button>
             </div>
 
@@ -1074,8 +1074,8 @@ if (user?.role === "ADMIN") {
                 {authLoading
                   ? "Please wait..."
                   : authMode === "register"
-                    ? "Create account â†’"
-                    : "Login â†’"}
+                    ? "Create account →"
+                    : "Login →"}
               </button>
 
               <p className="auth-switch">
@@ -1125,7 +1125,7 @@ if (user?.role === "ADMIN") {
                 onClick={() => setBagOpen(false)}
                 aria-label="Close shopping bag"
               >
-                âœ•
+                ✕
               </button>
             </div>
 
@@ -1137,7 +1137,7 @@ if (user?.role === "ADMIN") {
                   type="button"
                   onClick={() => setBagOpen(false)}
                 >
-                  Continue shopping â†—
+                  Continue shopping ↗
                 </button>
               </div>
             ) : (
@@ -1165,7 +1165,7 @@ if (user?.role === "ADMIN") {
                             onClick={() => updateQuantity(item.id, -1)}
                             aria-label={`Decrease ${item.name} quantity`}
                           >
-                            âˆ’
+                            −
                           </button>
 
                           <span>{item.quantity}</span>
@@ -1211,7 +1211,7 @@ if (user?.role === "ADMIN") {
                     type="button"
                     onClick={handleContinueCheckout}
                   >
-                    Continue to checkout â†’
+                    Continue to checkout →
                   </button>
                 </div>
               </>
@@ -1253,7 +1253,7 @@ if (user?.role === "ADMIN") {
                 }}
                 aria-label="Close checkout"
               >
-                âœ•
+                ✕
               </button>
             </div>
 
@@ -1386,12 +1386,12 @@ if (user?.role === "ADMIN") {
                   className="primary-button bag-checkout"
                   type="submit"
                 >
-                  Pay Demo Â· {money(cartTotal)} â†’
+                  Pay Demo · {money(cartTotal)} →
                 </button>
               </form>
             ) : (
               <div className="payment-success-panel">
-                <div className="payment-success-icon">âœ“</div>
+                <div className="payment-success-icon">✓</div>
 
                 <p className="eyebrow">DEMO PAYMENT CONFIRMED</p>
                 <h3>You're one step away.</h3>
@@ -1418,7 +1418,7 @@ if (user?.role === "ADMIN") {
                   onClick={handlePlaceOrder}
                   disabled={placingOrder}
                 >
-                  {placingOrder ? "Saving order..." : "Place Order â†’"}
+                  {placingOrder ? "Saving order..." : "Place Order →"}
                 </button>
 
                 <button
@@ -1452,7 +1452,7 @@ if (user?.role === "ADMIN") {
       {/* Dashboard Header */}
       <header className="account-dashboard-header">
         <div>
-          <p className="eyebrow">MAISON â€¢ YOUR PERSONAL SPACE</p>
+          <p className="eyebrow">MAISON • YOUR PERSONAL SPACE</p>
           <h2>My Account</h2>
           <p>
             Welcome back, {user?.fullName || "Customer"}.
@@ -1465,7 +1465,7 @@ if (user?.role === "ADMIN") {
           onClick={() => setAccountView("")}
           aria-label="Close account dashboard"
         >
-          âœ•
+          ✕
         </button>
       </header>
 
@@ -1493,7 +1493,7 @@ if (user?.role === "ADMIN") {
             }`}
             onClick={() => openAccountSection("profile")}
           >
-            <span>â™™</span>
+            <span>👤</span>
             My Profile
           </button>
 
@@ -1504,7 +1504,7 @@ if (user?.role === "ADMIN") {
             }`}
             onClick={() => openAccountSection("orders")}
           >
-            <span>â–¤</span>
+            <span>📦</span>
             My Orders
           </button>
 
@@ -1516,7 +1516,7 @@ if (user?.role === "ADMIN") {
               setBagOpen(true);
             }}
           >
-            <span>â™¡</span>
+            <span>♡</span>
             Shopping Bag
           </button>
 
@@ -1525,7 +1525,7 @@ if (user?.role === "ADMIN") {
             className="account-nav-item account-logout-item"
             onClick={handleLogout}
           >
-            <span>â†ª</span>
+            <span>↪</span>
             Logout
           </button>
         </aside>
@@ -1586,14 +1586,14 @@ if (user?.role === "ADMIN") {
                     <strong>
                       {profile?.fullName ||
                         user?.fullName ||
-                        "â€”"}
+                        "—"}
                     </strong>
                   </div>
 
                   <div className="account-detail">
                     <span>Email Address</span>
                     <strong>
-                      {profile?.email || user?.email || "â€”"}
+                      {profile?.email || user?.email || "—"}
                     </strong>
                   </div>
 
@@ -1609,7 +1609,7 @@ if (user?.role === "ADMIN") {
                   <div className="account-detail">
                     <span>Customer ID</span>
                     <strong>
-                      {profile?.id ?? user?.id ?? "â€”"}
+                      {profile?.id ?? user?.id ?? "—"}
                     </strong>
                   </div>
 
@@ -1638,7 +1638,7 @@ if (user?.role === "ADMIN") {
                   type="button"
                   onClick={() => openAccountSection("orders")}
                 >
-                  View Orders â†’
+                  View Orders →
                 </button>
               </div>
             </div>
@@ -1652,7 +1652,7 @@ if (user?.role === "ADMIN") {
 
               {orders.length === 0 ? (
                 <div className="account-empty-orders">
-                  <div className="account-empty-icon">â—‡</div>
+                  <div className="account-empty-icon">◇</div>
                   <h4>No orders yet</h4>
                   <p>
                     Your purchases will appear here after you
@@ -1664,7 +1664,7 @@ if (user?.role === "ADMIN") {
                     type="button"
                     onClick={() => setAccountView("")}
                   >
-                    Continue Shopping â†’
+                    Continue Shopping →
                   </button>
                 </div>
               ) : (
@@ -1705,7 +1705,7 @@ if (user?.role === "ADMIN") {
                             {String(
                               order.paymentMethod ||
                                 order.payment_method ||
-                                "â€”"
+                                "—"
                             ).replace("_DEMO", " Demo")}
                           </strong>
                         </div>
@@ -1744,7 +1744,7 @@ if (user?.role === "ADMIN") {
                               {item.productName ||
                                 item.product_name ||
                                 "Product"}{" "}
-                              Ã— {item.quantity}
+                              × {item.quantity}
                             </span>
 
                             <strong>
