@@ -27,3 +27,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+src/AdminDashboard.jsx.bak
+src/App.jsx.bak
