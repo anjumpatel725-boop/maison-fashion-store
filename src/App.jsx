@@ -114,6 +114,14 @@ function App() {
 
   const [paymentMethod, setPaymentMethod] = useState("UPI");
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+  const [deliveryDetails, setDeliveryDetails] = useState({
+  customerName: "",
+  customerEmail: "",
+  phone: "",
+  shippingAddress: "",
+  city: "",
+  postalCode: "",
+});
   const [placingOrder, setPlacingOrder] = useState(false);
 
   const [accountView, setAccountView] = useState("");
@@ -532,6 +540,31 @@ setCheckoutOpen(true);
       );
       return;
     }
+    const customerName = String(formData.get("name") || "").trim();
+const phone = String(formData.get("phone") || "").trim();
+const shippingAddress = String(formData.get("address") || "").trim();
+const city = String(formData.get("city") || "").trim();
+const postalCode = String(formData.get("pincode") || "").trim();
+
+if (
+  !customerName ||
+  !phone ||
+  !shippingAddress ||
+  !city ||
+  !postalCode
+) {
+  showNotice("Please complete all delivery details.");
+  return;
+}
+
+setDeliveryDetails({
+  customerName,
+  customerEmail: email,
+  phone,
+  shippingAddress,
+  city,
+  postalCode,
+});
 
     // Demo only: no real money is charged here.
     setPaymentSuccessful(true);
@@ -597,13 +630,8 @@ if (
           "Content-Type": "application/json",
           ...authHeaders,
         },
-      body: JSON.stringify({
-  customerName,
-  customerEmail,
-  phone,
-  shippingAddress,
-  city,
-  postalCode,
+     body: JSON.stringify({
+  ...deliveryDetails,
   paymentMethod:
     paymentMethod === "UPI" ? "UPI_DEMO" : "CARD_DEMO",
   items: cart.map((item) => ({
