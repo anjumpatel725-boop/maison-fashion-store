@@ -576,107 +576,106 @@ setDeliveryDetails({
     );
   }
 
-  // Save order through backend
-  async function handlePlaceOrder() {
-    if (!user || !token) {
-      setPaymentSuccessful(false);
-      openAuth("login");
-      showNotice("Please login again before placing your order.");
-      return;
-    }
 
-    if (!cart.length) {
-      showNotice("Your bag is empty.");
-      return;
-    }
-
-    setPlacingOrder(true);
-    const checkoutForm = document.querySelector(
-  ".checkout-form"
-);
-
-if (!checkoutForm) {
-  showNotice("Checkout details nahi mile. Please try again.");
-  setPlacingOrder(false);
-  return;
-}
-
-const checkoutData = new FormData(checkoutForm);
-
-const customerName = String(checkoutData.get("name") || "").trim();
-const customerEmail = String(checkoutData.get("email") || "").trim();
-const phone = String(checkoutData.get("phone") || "").trim();
-const shippingAddress = String(checkoutData.get("address") || "").trim();
-const city = String(checkoutData.get("city") || "").trim();
-const postalCode = String(checkoutData.get("pincode") || "").trim();
-
-if (
-  !customerName ||
-  !customerEmail ||
-  !phone ||
-  !shippingAddress ||
-  !city ||
-  !postalCode
-) {
-  showNotice("Please fill in all delivery details before placing your order.");
-  setPlacingOrder(false);
-  return;
-}
-
-    try {
-      const response = await fetch(ORDERS_API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...authHeaders,
-        },
-     body: JSON.stringify({
-  ...deliveryDetails,
-  paymentMethod:
-    paymentMethod === "UPI" ? "UPI_DEMO" : "CARD_DEMO",
-  items: cart.map((item) => ({
-    productId: Number(item.id),
-    quantity: item.quantity,
-  })),
-}),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (response.status === 401 || response.status === 403) {
-        throw new Error(
-          "Your login session may have expired. Please log in again."
-        );
-      }
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail ||
-            data.message ||
-            `Could not save order (${response.status}). Please try again.`
-        );
-      }
-
-      // Clear the cart only after the backend confirms success.
-      setCart([]);
-      setCheckoutOpen(false);
-      setPaymentSuccessful(false);
-      setPaymentMethod("UPI");
-      trackActivity("ORDER_PLACED", "/orders");
-      showNotice(
-        `Order ${data.orderNumber || ""} placed and saved successfully!`
-      );
-
-      await openAccountSection("orders");
-    } catch (error) {
-      showNotice(
-        error.message ||
-          "Order save nahi hua. Cart is still preserved; please try again."
-      );
-    } finally {
-      setPlacingOrder(false);
-    }
+async function handlePlaceOrder() {
+  if (!user || !token) {
+    setPaymentSuccessful(false);
+    openAuth("login");
+    showNotice("Please login again before placing your order.");
+    return;
   }
+
+  if (!cart.length) {
+    showNotice("Your bag is empty.");
+    return;
+  }
+
+  const {
+    customerName,
+    customerEmail,
+    phone,
+    shippingAddress,
+    city,
+    postalCode,
+  } = deliveryDetails;
+
+  if (
+    !customerName?.trim() ||
+    !customerEmail?.trim() ||
+    !phone?.trim() ||
+    !shippingAddress?.trim() ||
+    !city?.trim() ||
+    !postalCode?.trim()
+  ) {
+    showNotice("Delivery details missing. Please go back to checkout.");
+    setPaymentSuccessful(false);
+    return;
+  }
+
+  setPlacingOrder(true);
+
+  try {
+    const response = await fetch(ORDERS_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeaders,
+      },
+      body: JSON.stringify({
+        customerName: customerName.trim(),
+        customerEmail: customerEmail.trim().toLowerCase(),
+        phone: phone.trim(),
+        shippingAddress: shippingAddress.trim(),
+        city: city.trim(),
+        postalCode: postalCode.trim(),
+        paymentMethod:
+          paymentMethod === "UPI" ? "UPI_DEMO" : "CARD_DEMO",
+        items: cart.map((item) => ({
+          productId: Number(item.id),
+          quantity: item.quantity,
+        })),
+      }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.status === 401 || response.status === 403) {
+      throw new Error(
+        "Your login session may have expired. Please log in again."
+      );
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        data.detail ||
+          data.message ||
+          data.error ||
+          `Could not save order (${response.status}). Please try again.`
+      );
+    }
+
+    setCart([]);
+    setCheckoutOpen(false);
+    setPaymentSuccessful(false);
+    setPaymentMethod("UPI");
+
+    trackActivity("ORDER_PLACED", "/orders");
+
+    showNotice(
+      `Order ${data.orderNumber || data.order_number || ""} placed and saved successfully!`
+    );
+
+    await openAccountSection("orders");
+  } catch (error) {
+    showNotice(
+      error.message ||
+        "Order save nahi hua. Cart is still preserved; please try again."
+    );
+  } finally {
+    setPlacingOrder(false);
+  }
+}
+
 
   // Load profile or order history
   async function openAccountSection(section) {
