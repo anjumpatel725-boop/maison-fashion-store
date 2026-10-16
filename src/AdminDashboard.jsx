@@ -79,6 +79,46 @@ function displayStatus(status) {
 
 }
 
+function formatOrderAddress(order) {
+  const address =
+    order.shippingAddress ??
+    order.shipping_address ??
+    order.deliveryAddress ??
+    order.delivery_address ??
+    order.address;
+
+  if (typeof address === "string") {
+    return address.trim() || "Address unavailable";
+  }
+
+  if (address && typeof address === "object") {
+    const parts = [
+      address.fullName,
+      address.addressLine1,
+      address.addressLine2,
+      address.street,
+      address.landmark,
+      address.city,
+      address.state,
+      address.postalCode ?? address.postal_code ?? address.pincode ?? address.pinCode ?? address.zipCode,
+      address.country,
+    ].filter((part) => part != null && String(part).trim() !== "");
+
+    return parts.length ? parts.join(", ") : "Address unavailable";
+  }
+
+  const parts = [
+    order.addressLine1 ?? order.address_line1,
+    order.addressLine2 ?? order.address_line2,
+    order.city,
+    order.state,
+    order.postalCode ?? order.postal_code ?? order.pincode ?? order.pinCode ?? order.zipCode,
+    order.country,
+  ].filter((part) => part != null && String(part).trim() !== "");
+
+  return parts.length ? parts.join(", ") : "Address unavailable";
+}
+
 export default function AdminDashboard({
 
   token,
@@ -553,7 +593,8 @@ const loadRevenue = useCallback(async () => {
       String(order.customerName || "").toLowerCase().includes(query) ||
 
       String(order.customerEmail || "").toLowerCase().includes(query) ||
-
+      formatOrderAddress(order).toLowerCase().includes(query) ||
+      String(order.customerPhone || order.phone || "").toLowerCase().includes(query) ||
       String(order.orderStatus || "").toLowerCase().includes(query);
 
     const matchesFilter =
@@ -1345,7 +1386,7 @@ const loadRevenue = useCallback(async () => {
 
                   <thead>
 
-                    <tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Order date</th><th>Delivery status</th></tr>
+                    <tr><th>Order</th><th>Customer</th><th>Delivery address</th><th>Items</th><th>Total</th><th>Payment</th><th>Order date</th><th>Delivery status</th></tr>
 
                   </thead>
 
@@ -1364,9 +1405,18 @@ const loadRevenue = useCallback(async () => {
                             <strong>{order.customerName || "Customer"}</strong>
 
                             <small>{order.customerEmail || "Email unavailable"}</small>
+                            {(order.customerPhone || order.phone) && (
+                              <small>{order.customerPhone || order.phone}</small>
+                            )}
 
                           </div>
 
+                        </td>
+
+                        <td>
+                          <div className="admin-order-address">
+                            <span>{formatOrderAddress(order)}</span>
+                          </div>
                         </td>
 
                         <td>
