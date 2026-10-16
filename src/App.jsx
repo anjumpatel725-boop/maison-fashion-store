@@ -558,6 +558,37 @@ setCheckoutOpen(true);
     }
 
     setPlacingOrder(true);
+    const checkoutForm = document.querySelector(
+  ".checkout-form"
+);
+
+if (!checkoutForm) {
+  showNotice("Checkout details nahi mile. Please try again.");
+  setPlacingOrder(false);
+  return;
+}
+
+const checkoutData = new FormData(checkoutForm);
+
+const customerName = String(checkoutData.get("name") || "").trim();
+const customerEmail = String(checkoutData.get("email") || "").trim();
+const phone = String(checkoutData.get("phone") || "").trim();
+const shippingAddress = String(checkoutData.get("address") || "").trim();
+const city = String(checkoutData.get("city") || "").trim();
+const postalCode = String(checkoutData.get("pincode") || "").trim();
+
+if (
+  !customerName ||
+  !customerEmail ||
+  !phone ||
+  !shippingAddress ||
+  !city ||
+  !postalCode
+) {
+  showNotice("Please fill in all delivery details before placing your order.");
+  setPlacingOrder(false);
+  return;
+}
 
     try {
       const response = await fetch(ORDERS_API_URL, {
@@ -566,14 +597,20 @@ setCheckoutOpen(true);
           "Content-Type": "application/json",
           ...authHeaders,
         },
-        body: JSON.stringify({
-          paymentMethod:
-            paymentMethod === "UPI" ? "UPI_DEMO" : "CARD_DEMO",
-          items: cart.map((item) => ({
-            productId: Number(item.id),
-            quantity: item.quantity,
-          })),
-        }),
+      body: JSON.stringify({
+  customerName,
+  customerEmail,
+  phone,
+  shippingAddress,
+  city,
+  postalCode,
+  paymentMethod:
+    paymentMethod === "UPI" ? "UPI_DEMO" : "CARD_DEMO",
+  items: cart.map((item) => ({
+    productId: Number(item.id),
+    quantity: item.quantity,
+  })),
+}),
       });
 
       const data = await response.json().catch(() => ({}));
